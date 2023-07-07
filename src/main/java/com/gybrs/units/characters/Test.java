@@ -1,22 +1,24 @@
 package com.gybrs.units.characters;
 
-import com.gybrs.units.core.value.*;
+import com.gybrs.units.core.UnitBase;
+import com.gybrs.units.core.value.GuardPoint;
+import com.gybrs.units.core.value.HitPoint;
+import com.gybrs.units.core.value.PowerPoint;
 
-public class Test extends Unit {
-    private HitPoint hitpoint;
+public final class Test implements UnitBase {
+    private HitPoint hitPoint;
     private PowerPoint powerPoint;
     private GuardPoint guardPoint;
 
     public Test(final double hValue, final double pValue, final double gValue) {
-        this.hitpoint = new HitPoint(hValue);
+        this.hitPoint = new HitPoint(hValue);
         this.powerPoint = new PowerPoint(pValue);
         this.guardPoint = new GuardPoint(gValue);
     }
 
-
     @Override
     public double getHP() {
-        return this.hitpoint.getValue();
+        return this.hitPoint.getValue();
     }
 
     @Override
@@ -30,21 +32,20 @@ public class Test extends Unit {
     }
 
     @Override
-    public void getDamage(final double value) {
-        this.hitpoint = new HitPoint(hitpoint.getValue() - value);
+    public boolean isAlive() {
+        return getHP() > 0;
     }
-
 
     @Override
-    public boolean isAlive() {
-        return this.hitpoint.getValue() > 0;
+    public void getDamage(final double value) {
+        this.hitPoint = (HitPoint) this.hitPoint.reinValue(this.hitPoint.getValue() - value);
     }
-
 
     @Override
     public String toString() {
-        return "HP: " + this.hitpoint.getValue() + "\n" +
-                "POWER: " + this.powerPoint.getValue() + "\n" +
-                "GUARD: " + this.guardPoint.getValue() + "\n";
+        return "HP: " + this.getHP() + "\n" +
+                "POWER: " + this.getPower() + "\n" +
+                "GUARD: " + this.getGuard();
     }
+
 }
